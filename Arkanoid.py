@@ -1,3 +1,5 @@
+import pygame,sys
+from pygame.locals import *
 
 pygame.display.set_caption("Proyecto lp")
 # colores definidos por el monitor RGB
@@ -15,15 +17,15 @@ class bola:
         self.posy=y#el radio del circulo
         self.width=width#anchuta de la pelotita
         self.screen=screen#tiene que ir en una superficie, en este caso la pantalla ezzzz:u
-        self.x2=1
-        self.y2=1
+        self.x2=1#es la velocidad a la que se mueve en el eje x
+        self.y2=1#es la velocidad a la que se mueve en el eje y
         self.rect=Rect(self.posx,self.posy,self.width,self.width)
     
     #circle(Surface, color, pos, radius,anchura)
     def crea(self,objeto):
-        self.posx += self.x2
-        self.posy += self.y2
-        self.rect=Rect(self.posx,self.posy,self.width,self.width)
+        self.posx += self.x2#hace que se emueva
+        self.posy += self.y2#hace que se mueva
+        self.rect=Rect(self.posx,self.posy,self.width,self.width)#lo tengo que poner porque si no no me deja ejecutar:u
         pygame.draw.circle(self.screen,self.color,(int(self.posx),int(self.posy)),self.width)#creando la bola
 
         if self.posx < 10 or self.posx > 890:#si choca con la parte inferior o superior de la pantalla
@@ -32,25 +34,25 @@ class bola:
         if self.posy < 10 or self.posy > 490:#si choca con la parte izquierda o derecha de la pantalla
             self.y2 *= -1 #cambia de direccion  
         
-        if self.rect.colliderect(objeto):
-            self.y2 *= -1
+        if self.rect.colliderect(objeto):#para la colision,si colisiona con otro objeto, en este caso la barra que se mueve abajo 
+            self.y2 *= -1#solo tiene que cmbiar la direccion de y, ya ue solo choca con la barra
 
 class Labarra:
     def __init__(self,screen,color,x,y):
         self.color=color#color del rectangulo
-        self.a=100
-        self.h=10
-        self.x=x
-        self.y=y
+        self.a=100#largo de la barra
+        self.h=10#ancho de la barra
+        self.x=x#posicion en la que esta
+        self.y=y#posicion en la que esta
         self.rect = Rect(self.x,self.y,self.a,self.h)#x,y,ancho,altura
         self.screen=screen#pantalla
-        self.x2=0#velocidad
+        self.x2=0#velocidad de movimiento
         
     def crear(self,x2):
         self.rect = Rect(self.x,self.y,self.a,self.h)
-        pygame.draw.rect(self.screen,self.color,self.rect)
-        if (self.x>0 and x2==-5) or (self.x<900-self.a and x2==5):
-            self.x += x2 
+        pygame.draw.rect(self.screen,self.color,self.rect)#dibujando la barra
+        if (self.x>0 and x2==-5) or (self.x<900-self.a and x2==5):#para que no salga de los bordes
+            self.x += x2 #movimiento :u
 
 def main():
     pygame.init()#iniciando el motor de juego
@@ -70,15 +72,14 @@ def main():
             if event.type == pygame.QUIT:# Verificamos el tipo de evento.
                 pygame.quit()#si no lo pongo el prograama se cuelga
                 sys.exit()#ni la mas minima idea :u
-        if f[pygame.K_LEFT]:
+        if f[pygame.K_LEFT]:#para que se mueva con la tecla
             obj2.crear(-5)
-        if f[pygame.K_RIGHT]:
+        if f[pygame.K_RIGHT]:#para que se mueva con la tecla
             obj2.crear(5)
             
         
 if __name__=="__main__":
     main()
-
     
     las barras 
     
