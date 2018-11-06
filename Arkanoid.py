@@ -1,7 +1,3 @@
-import sys
-import pygame#importando la libreria
-from pygame.locals import *
-
 
 pygame.display.set_caption("Proyecto lp")
 # colores definidos por el monitor RGB
@@ -19,8 +15,8 @@ class bola:
         self.posy=y#el radio del circulo
         self.width=width#anchuta de la pelotita
         self.screen=screen#tiene que ir en una superficie, en este caso la pantalla ezzzz:u
-        self.x2=0.5
-        self.y2=0.5
+        self.x2=1
+        self.y2=1
         self.rect=Rect(self.posx,self.posy,self.width,self.width)
     
     #circle(Surface, color, pos, radius,anchura)
@@ -42,7 +38,7 @@ class bola:
 class Labarra:
     def __init__(self,screen,color,x,y):
         self.color=color#color del rectangulo
-        self.a=50
+        self.a=100
         self.h=10
         self.x=x
         self.y=y
@@ -55,7 +51,6 @@ class Labarra:
         pygame.draw.rect(self.screen,self.color,self.rect)
         if (self.x>0 and x2==-5) or (self.x<900-self.a and x2==5):
             self.x += x2 
-    
 
 def main():
     pygame.init()#iniciando el motor de juego
