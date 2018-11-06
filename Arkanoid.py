@@ -1,7 +1,7 @@
 import pygame,sys
 from pygame.locals import *
 
-pygame.display.set_caption("Proyecto lp")
+pygame.display.set_caption("Proyecto lp")#es para darle nombre a la ventana
 # colores definidos por el monitor RGB
 NEGRO  = (0,0,0)#0 significa que no hay color 
 BLANCO = (255,255,255)
