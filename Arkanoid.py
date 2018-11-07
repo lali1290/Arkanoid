@@ -17,8 +17,8 @@ class bola(pygame.sprite.Sprite):
         self.posy=y
         self.width=width
         self.screen=screen
-        self.x2=1
-        self.y2=1
+        self.x2=2
+        self.y2=2
         self.rect=Rect(self.posx,self.posy,self.width,self.width)
 
     def coliPB(self):
@@ -45,7 +45,7 @@ class bola(pygame.sprite.Sprite):
 class Labarra:
     def __init__(self,screen,color,x,y):
         self.color=color#color del rectangulo
-        self.a=50
+        self.a=80
         self.h=10
         self.x=x
         self.y=y
@@ -69,13 +69,7 @@ class Barra(pygame.sprite.Sprite):
         self.y=y
         self.rect=Rect(self.x,self.y,100,30)
         self.screen=screen#pantalla
-"""     
-    def colision(self,bola):
-        self.rect=Rect(self.x,self.y,100,30)
-        if self.rect.colliderect(bola):
-                barras.sprite.kill()
-            bola.crear()
-  """
+
 class Agrupar(Barra):
     def __init__(self):
         pass
@@ -123,9 +117,10 @@ def main():
             obj2.crear(-5)
         if f[pygame.K_RIGHT]:
             obj2.crear(5)
-        if obj1.posy==500:
+        if obj1.posy>=490:
             obj1.x2=0
             obj1.y2=0
+            
         
         screen.fill(BLANCO)
         obj1.crea(obj2.rect)#llamo a crear la bola
