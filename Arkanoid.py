@@ -84,51 +84,55 @@ class Agrupar(Barra):#asignacion del grupo de barras superiores
                 barras.add(barra)#agrego a la lista de sprite las barras generadas arriba
 
 def main():
-    pygame.init()
-    size=(900,500)
-    screen=pygame.display.set_mode(size) 
-    screen.fill(BLANCO)
+    pygame.init()#inicializa el motor de juegos
+    size=(900,500)#alto y ancho de la pantalla
+    screen=pygame.display.set_mode(size)#creando la pantlla con el ancho y alto asignado
     
-    reloj = pygame.time.Clock()
+    reloj = pygame.time.Clock()#gestiona en cuanto se actualiza la pantalla
     
-    obj1=bola(screen,ROJO,450,480,10)
-    obj2=Labarra(screen,VIOLETA,450,490)
+    bolita=bola(screen,ROJO,450,480,10)#creando la bola
+    obj2=Labarra(screen,VIOLETA,450,490)#creando la barra inferior
     
     lista=Agrupar()#llamo a las barras de arriba 
-    holis= pygame.sprite.Group()
-    lista.generar(holis,screen)
+    holis= pygame.sprite.Group()#se crea un grupo de sprite que se usaran en el uso de las barras
+    lista.generar(holis,screen)#genero las barras
     
-    pelota=pygame.sprite.Group()
-    pelota.add(obj1)
+    pelota=pygame.sprite.Group()#creo una lista de sprite
+    pelota.add(bolita)#meto al sprite pelota a la lista anterior
     
-    pygame.display.flip()
-    while True:
-        f=pygame.key.get_pressed()
+    pygame.display.flip()#actualizo la pantalla con esta funcion
+    
+    while True:#el bucle es para ...... no me acuerdo :u pero siempre va a repetirse lo que este dentro
+        f=pygame.key.get_pressed()#si se presiona alguna tecla 
         
-        listaCol = pygame.sprite.groupcollide(holis,pelota,True,False)
+        listaCol = pygame.sprite.groupcollide(holis,pelota,True,False)#esta funcion se usa para las colisiones
+        # la funcion necesita 2 listas de sprite para funcionar, por eso se genero una lista se sprite de la bola
+        #la funcion utomaticamente puede eliminar un sprite, por ello va el True y False
+        #la funcion me devuelve una lista, por lo que si choca con uno, la bola automaticamente tiene que cambiar de direccion
+        if len(listaCol)==1:#si choca con un sprite la bola cambia de direccion 
+            bolita.coliPB()#si colisiona con alguno la bolita va a cambiar de direccion
         
-        if len(listaCol)==1:
-            obj1.coliPB()
-        for event in pygame.event.get():            
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-        if f[pygame.K_LEFT]:
-            obj2.crear(-5)
-        if f[pygame.K_RIGHT]:
-            obj2.crear(5)
-        if obj1.posy>=490:
-            obj1.x2=0
-            obj1.y2=0
+        for event in pygame.event.get():#en caso de que ocurra algun evento          
+            if event.type == pygame.QUIT:#si me quiero irshhhhh pos me voy :u
+                pygame.quit()#cierra la ventana
+                sys.exit()#se tiene que poner para que no se cuelgue
+        if f[pygame.K_LEFT]:#si preciono la tecla izquierda
+            obj2.crear(-5)#la barra se mueve en la posicion x en -5
+        if f[pygame.K_RIGHT]:#si preciono la tecla derecha
+            obj2.crear(5)#la barra se mueve en la posicion x en 5
+        if bolita.posy>=490:#si la bolita se pasa de la barra pos deja de moverse
+            bolita.x2=0
+            bolita.y2=0
+            """
             texto="Fin del Juego Prro"
-            screen.blit(texto,(450,250),BLEND_RGBA_ADD)
+            screen.blit(texto,(450,250),BLEND_RGBA_ADD)"""
             
-        screen.fill(BLANCO)
-        obj1.crea(obj2.rect)#llamo a crear la bola
-        obj2.crear(0)
-        holis.draw(screen)
-        reloj.tick(150)
-        pygame.display.flip()  
+        screen.fill(BLANCO)#le doy color a la pantalla
+        bolita.crea(obj2.rect)#llamo a crear la bola
+        obj2.crear(0)#llamo a crear la barra inferior
+        holis.draw(screen)#la funcion dibuja la lista de sprite
+        reloj.tick(150)#tiempo en que se demora en actualizar la pantalla
+        pygame.display.flip()#actualizo la pantalla
 
 if __name__=="__main__":
     main()
