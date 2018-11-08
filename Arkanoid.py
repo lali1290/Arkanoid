@@ -1,7 +1,6 @@
 import pygame,sys,random
 from pygame.locals import *
 
-pygame.display.set_caption("Proyecto lp")#nombre de la pantalla
 #colores referenciales
 NEGRO  = (0,0,0)
 BLANCO = (255,255,255)
@@ -31,6 +30,7 @@ class bola(pygame.sprite.Sprite):#la bola
         self.posy += self.y2#el como aumenta la posicion de acuerdo a la velocidad
         self.rect=Rect(self.posx,self.posy,self.width,self.width)
         pygame.draw.circle(self.screen,self.color,(int(self.posx),int(self.posy)),self.width)#aqui recien dibuja la bola
+        
         if self.posx < 10 or self.posx > 890:#Para que no salga del borde de la pantalla en el eje x
             self.x2 *= -1 
 
@@ -39,7 +39,7 @@ class bola(pygame.sprite.Sprite):#la bola
             
         if self.rect.colliderect(objeto):#si coliciona con un objeto rect
             self.y2 *= -1
-            
+
 class Labarra:#la barra inferior
     def __init__(self,screen,color,x,y):
         self.color=color#color del rectangulo
@@ -47,12 +47,12 @@ class Labarra:#la barra inferior
         self.h=10#ancho del rectangulo
         self.x=x#la posicion en el eje x 
         self.y=y#la posicion en el eje y
-        self.rect = Rect(self.x,self.y,self.a,self.h)#x,y,ancho,altura
+        self.rect=Rect(self.x,self.y,self.a,self.h)#x,y,ancho,altura
         self.screen=screen#pantalla
         self.x2=0#velocidad en el eje x 
         
     def crear(self,x2):
-        self.rect = Rect(self.x,self.y,self.a,self.h)
+        self.rect=Rect(self.x,self.y,self.a,self.h)
         pygame.draw.rect(self.screen,self.color,self.rect)#se dibuja la barra inferior
         if (self.x>0 and x2==-5) or (self.x<900-self.a and x2==5):#para que se mueva sin salirse de la pantalla
             self.x += x2 #se mueve en el eje x
@@ -80,15 +80,16 @@ class Agrupar(Barra):#asignacion del grupo de barras superiores
                 c1 =random.randint(1,254)#color aleatorio
                 c2 =random.randint(1,254)#color aleatorio
                 c3 =random.randint(1,254)#color aleatorio
-                barra=Barra(screen,(c1,c2,c3),x*100,y*30)#genero una barra
-                barras.add(barra)#agrego a la lista de sprite las barras generadas arriba
+                creando_barra=Barra(screen,(c1,c2,c3),x*100,y*30)#genero una barra
+                barras.add(creando_barra)#agrego a la lista de sprite las barras generadas arriba
 
 def main():
     pygame.init()#inicializa el motor de juegos
+    pygame.display.set_caption("Proyecto lp")#nombre de la pantalla
     size=(900,500)#alto y ancho de la pantalla
     screen=pygame.display.set_mode(size)#creando la pantlla con el ancho y alto asignado
     
-    pygame.font.init()
+    pygame.font.init()#inicializo el motor de letras
     fuente = pygame.font.SysFont('Showcard Gothic', 50)
         
     reloj = pygame.time.Clock()#gestiona en cuanto se actualiza la pantalla
@@ -99,11 +100,11 @@ def main():
     barras_sup=Agrupar()#llamo a las barras de arriba 
     lista_barras= pygame.sprite.Group()#se crea un grupo de sprite que se usaran en el uso de las barras
     barras_sup.generar(lista_barras,screen)#genero las barras
-    
+
     pelota=pygame.sprite.Group()#creo una lista de sprite
     pelota.add(bolita)#meto al sprite pelota a la lista anterior
     
-    pygame.display.flip()#actualizo la pantalla con esta funcion
+    #pygame.display.flip()#actualizo la pantalla con esta funcion
     
     MATADOR=True 
     while MATADOR:#el bucle es para ...... no me acuerdo :u pero siempre va a repetirse lo que este dentro
@@ -121,21 +122,25 @@ def main():
             if event.type == pygame.QUIT:#si me quiero irshhhhh pos me voy :u
                 pygame.quit()#cierra la ventana
                 sys.exit()#se tiene que poner para que no se cuelgue
+        
         if f[pygame.K_LEFT]:#si preciono la tecla izquierda
             Labarra_inf.crear(-5)#la barra se mueve en la posicion x en -5
+        
         if f[pygame.K_RIGHT]:#si preciono la tecla derecha
             Labarra_inf.crear(5)#la barra se mueve en la posicion x en 5
+        
         if bolita.posy>=490:#si la bolita se pasa de la barra pos deja de moverse
             bolita.x2=0
             bolita.y2=0
             MATADOR=False
-        if len(lista_barras)==0:
+        
+        if len(lista_barras)==0:#26
             bolita.x2=0
             bolita.y2=0
             MATADOR=False
         
-        screen.fill(BLANCO)#le doy color a la pantalla
-        bolita.crea(Labarra_inf.rect)#llamo a crear la bola
+        screen.fill(BLANCO)#se da color a la pantalla
+        bolita.crea(Labarra_inf.rect)#llama a crear la bola
         Labarra_inf.crear(0)#llamo a crear la barra inferior
         lista_barras.draw(screen)#la funcion dibuja la lista de sprite
         reloj.tick(150)#tiempo en que se demora en actualizar la pantalla
@@ -146,12 +151,14 @@ def main():
             if event.type == pygame.QUIT:#si me quiero irshhhhh pos me voy :u
                 pygame.quit()#cierra la ventana
                 sys.exit()
-        if len(lista_barras)==0:
-            texto=fuente.render("Felicidades GANASTE",False,NEGRO)
-            screen.blit(texto,(350,250))
+        if len(lista_barras)==0:#26
+            texto=fuente.render("Felicidades, GANASTE",False,NEGRO)
+            screen.blit(texto,(200,250))
         if bolita.posy>=490:#si la bolita se pasa de la barra pos deja de moverse
-            texto=fuente.render("Perdiste",False,NEGRO)
-            screen.blit(texto,(350,250))
+            texto=fuente.render("GAME OVER",False,NEGRO)
+            texto2=fuente.render("para mas niveles, pague prro",False,NEGRO)
+            screen.blit(texto,(300,250))
+            screen.blit(texto2,(100,300))
         pygame.display.flip()#actualizo la pantalla
 if __name__=="__main__":
     main()
