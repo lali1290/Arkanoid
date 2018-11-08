@@ -88,24 +88,29 @@ def main():
     size=(900,500)#alto y ancho de la pantalla
     screen=pygame.display.set_mode(size)#creando la pantlla con el ancho y alto asignado
     
+    pygame.font.init()
+    fuente = pygame.font.SysFont('Showcard Gothic', 50)
+        
     reloj = pygame.time.Clock()#gestiona en cuanto se actualiza la pantalla
     
     bolita=bola(screen,ROJO,450,480,10)#creando la bola
-    obj2=Labarra(screen,VIOLETA,450,490)#creando la barra inferior
+    Labarra_inf=Labarra(screen,VIOLETA,450,490)#creando la barra inferior
     
-    lista=Agrupar()#llamo a las barras de arriba 
-    holis= pygame.sprite.Group()#se crea un grupo de sprite que se usaran en el uso de las barras
-    lista.generar(holis,screen)#genero las barras
+    barras_sup=Agrupar()#llamo a las barras de arriba 
+    lista_barras= pygame.sprite.Group()#se crea un grupo de sprite que se usaran en el uso de las barras
+    barras_sup.generar(lista_barras,screen)#genero las barras
     
     pelota=pygame.sprite.Group()#creo una lista de sprite
     pelota.add(bolita)#meto al sprite pelota a la lista anterior
     
     pygame.display.flip()#actualizo la pantalla con esta funcion
     
-    while True:#el bucle es para ...... no me acuerdo :u pero siempre va a repetirse lo que este dentro
+    MATADOR=True 
+    while MATADOR:#el bucle es para ...... no me acuerdo :u pero siempre va a repetirse lo que este dentro
+        
         f=pygame.key.get_pressed()#si se presiona alguna tecla 
         
-        listaCol = pygame.sprite.groupcollide(holis,pelota,True,False)#esta funcion se usa para las colisiones
+        listaCol = pygame.sprite.groupcollide(lista_barras,pelota,True,False)#esta funcion se usa para las colisiones
         # la funcion necesita 2 listas de sprite para funcionar, por eso se genero una lista se sprite de la bola
         #la funcion utomaticamente puede eliminar un sprite, por ello va el True y False
         #la funcion me devuelve una lista, por lo que si choca con uno, la bola automaticamente tiene que cambiar de direccion
@@ -117,22 +122,36 @@ def main():
                 pygame.quit()#cierra la ventana
                 sys.exit()#se tiene que poner para que no se cuelgue
         if f[pygame.K_LEFT]:#si preciono la tecla izquierda
-            obj2.crear(-5)#la barra se mueve en la posicion x en -5
+            Labarra_inf.crear(-5)#la barra se mueve en la posicion x en -5
         if f[pygame.K_RIGHT]:#si preciono la tecla derecha
-            obj2.crear(5)#la barra se mueve en la posicion x en 5
+            Labarra_inf.crear(5)#la barra se mueve en la posicion x en 5
         if bolita.posy>=490:#si la bolita se pasa de la barra pos deja de moverse
             bolita.x2=0
             bolita.y2=0
-            """
-            texto="Fin del Juego Prro"
-            screen.blit(texto,(450,250),BLEND_RGBA_ADD)"""
-            
+            MATADOR=False
+        if len(lista_barras)==0:
+            bolita.x2=0
+            bolita.y2=0
+            MATADOR=False
+        
         screen.fill(BLANCO)#le doy color a la pantalla
-        bolita.crea(obj2.rect)#llamo a crear la bola
-        obj2.crear(0)#llamo a crear la barra inferior
-        holis.draw(screen)#la funcion dibuja la lista de sprite
+        bolita.crea(Labarra_inf.rect)#llamo a crear la bola
+        Labarra_inf.crear(0)#llamo a crear la barra inferior
+        lista_barras.draw(screen)#la funcion dibuja la lista de sprite
         reloj.tick(150)#tiempo en que se demora en actualizar la pantalla
         pygame.display.flip()#actualizo la pantalla
-
+        
+    while True:
+        for event in pygame.event.get():#en caso de que ocurra algun evento          
+            if event.type == pygame.QUIT:#si me quiero irshhhhh pos me voy :u
+                pygame.quit()#cierra la ventana
+                sys.exit()
+        if len(lista_barras)==0:
+            texto=fuente.render("Felicidades GANASTE",False,NEGRO)
+            screen.blit(texto,(350,250))
+        if bolita.posy>=490:#si la bolita se pasa de la barra pos deja de moverse
+            texto=fuente.render("Perdiste",False,NEGRO)
+            screen.blit(texto,(350,250))
+        pygame.display.flip()#actualizo la pantalla
 if __name__=="__main__":
     main()
